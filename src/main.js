@@ -14,6 +14,7 @@ const state = {
   trains: [], expandedId: null,
   lastFetchAt: null, error: false,
   sub: null,
+  metadataLoaded: false,
 };
 
 function render() {
@@ -23,16 +24,17 @@ function render() {
   $('time-toggle').textContent = state.timeMode === 'clock' ? t('countdownMode', state.lang) : t('clockMode', state.lang);
 
   const status = $('status');
+  const retryHandler = state.metadataLoaded ? refresh : loadMetadata;
   if (state.error && state.lastFetchAt) {
     status.hidden = false;
     status.innerHTML = `${esc(t('loadError', state.lang))} — ${esc(t('dataFrom', state.lang))} ` +
       `${state.lastFetchAt.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' })} ` +
       `<button id="retry">${esc(t('retry', state.lang))}</button>`;
-    document.getElementById('retry').onclick = refresh;
+    document.getElementById('retry').onclick = retryHandler;
   } else if (state.error) {
     status.hidden = false;
     status.innerHTML = `${esc(t('loadError', state.lang))} <button id="retry">${esc(t('retry', state.lang))}</button>`;
-    document.getElementById('retry').onclick = refresh;
+    document.getElementById('retry').onclick = retryHandler;
   } else {
     status.hidden = true;
   }
@@ -98,8 +100,7 @@ function restorePair() {
   if (f && tCode) setPair(find(f), find(tCode));
 }
 
-async function init() {
-  render();
+async function loadMetadata() {
   try {
     [state.stations, state.causeCodes] = await Promise.all([fetchStations(), fetchCauseCodes()]);
   } catch {
@@ -108,6 +109,14 @@ async function init() {
     return;
   }
 
+  state.error = false;
+  const alreadyWired = state.metadataLoaded;
+  state.metadataLoaded = true;
+  render();
+  if (!alreadyWired) wireApp();
+}
+
+function wireApp() {
   wireAutocomplete('from-input', 'from-list', s => setPair(s, state.to));
   wireAutocomplete('to-input', 'to-list', s => setPair(state.from, s));
 
@@ -134,6 +143,11 @@ async function init() {
   setInterval(refresh, 5 * 60000);   // REST safety net
 
   restorePair();
+}
+
+async function init() {
+  render();
+  await loadMetadata();
 }
 
 init();
