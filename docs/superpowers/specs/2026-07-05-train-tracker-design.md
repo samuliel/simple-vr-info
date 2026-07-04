@@ -47,7 +47,9 @@ Single screen:
   Arrival times at the destination always stay in clock format.
 - **Train list:** direct trains departing within the next 60 minutes, sorted by
   departure time. Each row: train type + number (IC 27, commuter line letter),
-  departure time (per toggle), track, arrival time at destination, and a delay
+  departure time (per toggle), track, arrival time at destination, trip
+  duration (e.g. "1 h 47 min", computed client-side from the origin departure
+  and destination arrival rows, using live estimates when present), and a delay
   badge — green "on time" (≤ 1 min), yellow "+N min" (2–5 min), red "+N min"
   (> 5 min), grey "peruttu / cancelled" for cancelled trains.
 - **Delay detail:** tapping a late train expands the row (accordion) showing
@@ -81,7 +83,7 @@ Single screen:
 ## Testing
 
 - Vitest unit tests for pure logic: train filtering/window rule, delay and
-  badge computation, cause-code resolution, station autocomplete matching,
+  badge computation, trip duration formatting, cause-code resolution, station autocomplete matching,
   countdown formatting. Fixtures are real JSON captured from the API.
 - Manual smoke test of the UI against the live API on mobile viewport.
 
