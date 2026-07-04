@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Junat</title>
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <header class="controls">
+    <div class="field">
+      <input id="from-input" autocomplete="off" placeholder="">
+      <ul id="from-list" class="suggestions" hidden></ul>
+    </div>
+    <button id="swap" type="button" aria-label="swap">⇅</button>
+    <div class="field">
+      <input id="to-input" autocomplete="off" placeholder="">
+      <ul id="to-list" class="suggestions" hidden></ul>
+    </div>
+    <div class="toggles">
+      <button id="time-toggle" type="button"></button>
+      <button id="lang-toggle" type="button"></button>
+    </div>
+  </header>
+  <div id="status" hidden></div>
+  <ul id="trains"></ul>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
