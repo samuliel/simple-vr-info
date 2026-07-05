@@ -1,2 +1,6 @@
 node_modules/
 dist/
+
+# Local Claude Code / superpowers agent state (machine-specific, not for public repo)
+.claude/
+.superpowers/
