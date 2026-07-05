@@ -8,7 +8,7 @@ const $ = id => document.getElementById(id);
 
 const state = {
   lang: localStorage.getItem('tt.lang') ?? defaultLang(),
-  timeMode: localStorage.getItem('tt.timeMode') ?? 'clock',
+  timeMode: localStorage.getItem('tt.timeMode') ?? 'countdown',
   from: null, to: null,          // station objects {stationName, stationShortCode}
   stations: [], causeCodes: { category: new Map(), detailed: new Map(), third: new Map() },
   trains: [], expandedId: null,
